@@ -1,13 +1,15 @@
 import Logo from './Logo'
+import LoopingVideo from './LoopingVideo'
+import SiteForm from './SiteForm'
 
 const HERO_VIDEO_URL =
   'https://d8j0ntlcm91z4.cloudfront.net/user_388ZoOS6inn6vSmXTWLmRgxtMfT/hf_20260725_144502_10430d67-61b0-4f30-9288-2d27718a1bcb.mp4'
 
 const NAV_LINKS = [
-  { label: 'Team', href: '#team' },
-  { label: 'How it works', href: '#how' },
-  { label: 'Control', href: '#control' },
-  { label: 'Plans', href: '#plans' },
+  { label: 'Team', href: '#' },
+  { label: 'How it works', href: '#' },
+  { label: 'Control', href: '#' },
+  { label: 'Plans', href: '#' },
 ]
 
 export default function Hero() {
@@ -15,16 +17,10 @@ export default function Hero() {
     <section className="relative h-screen w-full overflow-hidden flex flex-col">
       {/* Background video */}
       <div className="absolute inset-0 z-0">
-        <video
-          className="w-full h-[130%] object-cover object-top"
+        <LoopingVideo
           src={HERO_VIDEO_URL}
-          autoPlay
-          muted
-          loop
-          playsInline
+          className="w-full h-[130%] object-cover object-top"
         />
-        {/* Blends the video's bottom edge into the page ground below. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#FDFAF7]" />
       </div>
 
       {/* Navigation */}
@@ -68,12 +64,7 @@ export default function Hero() {
           attached. You approve. The team ships.
         </p>
 
-        <button
-          type="button"
-          className="mt-7 sm:mt-8 rounded-xl bg-flame px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-white shadow-[0px_4px_14px_rgba(242,107,29,0.4)] hover:bg-flame-deep hover:shadow-[0px_6px_18px_rgba(242,107,29,0.5)] transition-all duration-300"
-        >
-          Get Early Access
-        </button>
+        <SiteForm />
       </div>
     </section>
   )
