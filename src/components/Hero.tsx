@@ -3,7 +3,12 @@ import Logo from './Logo'
 const HERO_VIDEO_URL =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260714_113715_c7e0daa0-8bdd-4486-a2da-040901f8f0ea.mp4'
 
-const NAV_LINKS = ['Features', 'Plans', 'Security', 'About']
+const NAV_LINKS = [
+  { label: 'Features', href: '#features' },
+  { label: 'Plans', href: '#plans' },
+  { label: 'Security', href: '#security' },
+  { label: 'About', href: '#about' },
+]
 
 export default function Hero() {
   return (
@@ -18,6 +23,8 @@ export default function Hero() {
           loop
           playsInline
         />
+        {/* Blends the video's bottom edge into the page ground below. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#FBFAFE]" />
       </div>
 
       {/* Navigation */}
@@ -28,12 +35,12 @@ export default function Hero() {
           </a>
           <ul className="hidden sm:flex items-center gap-6 md:gap-8">
             {NAV_LINKS.map((link) => (
-              <li key={link}>
+              <li key={link.label}>
                 <a
-                  href="#"
+                  href={link.href}
                   className="text-sm font-medium text-[#1B133C]/80 hover:text-[#1B133C] transition-colors duration-200"
                 >
-                  {link}
+                  {link.label}
                 </a>
               </li>
             ))}
@@ -51,14 +58,14 @@ export default function Hero() {
         </div>
 
         <h1 className="font-['Instrument_Serif'] text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[#1B133C] max-w-4xl">
-          <span className="block">Deploy digital workers</span>
+          <span className="block">Deploy an AI workforce</span>
           <span className="block">for mundane workflows</span>
         </h1>
 
         <p className="mt-5 sm:mt-6 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#1B133C]/70">
-          Eliminate your tedious browser work and 10x your team's capacity. Put
-          intelligent agents on every routine process so you grow faster and
-          deliver more for clients — effortlessly.
+          Put an AI workforce on the browser work that eats your team's day.
+          Routine processes run themselves, so you add capacity without adding
+          headcount — and deliver more for clients, effortlessly.
         </p>
 
         <button
