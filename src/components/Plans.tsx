@@ -2,45 +2,45 @@ import SectionHeading from './SectionHeading'
 
 const PLANS = [
   {
-    name: 'Pilot',
-    price: '$2,400',
+    name: 'Solo',
+    price: '$1,200',
     cadence: '/month',
-    note: 'One process, one worker.',
+    note: 'One goal, one channel mix.',
     features: [
-      'A single workflow, fully deployed',
-      'Shadow week before go-live',
-      'Audit log and run history',
-      'Email support',
+      'Sol plus three specialists',
+      'One north-star goal at a time',
+      'Approval queue with reasoning',
+      'Attribution on every shipped task',
     ],
-    cta: 'Start a pilot',
+    cta: 'Start with one goal',
     featured: false,
   },
   {
-    name: 'Team',
-    price: '$9,000',
+    name: 'Growth',
+    price: '$4,800',
     cadence: '/month',
-    note: 'Up to ten workers across your operation.',
+    note: 'The full roster, all four goals running at once.',
     features: [
-      'Everything in Pilot',
-      'Ten concurrent workers',
-      'Scoped credential vault',
-      'Slack channel with our engineers',
-      'SSO and role-based access',
+      'Everything in Solo',
+      'All eight agents, every channel',
+      'Paid budgets up to $25k/mo managed',
+      'Co-pilot and auto-pilot modes',
+      'Voice calls with Sol',
     ],
     cta: 'Get early access',
     featured: true,
   },
   {
-    name: 'Enterprise',
+    name: 'Agency',
     price: 'Custom',
     cadence: '',
-    note: 'Your VPC, your compliance review.',
+    note: 'Every client brand, one control room.',
     features: [
-      'Everything in Team',
-      'Unlimited workers',
-      'Deploy inside your own VPC',
-      'SIEM export and custom retention',
-      'Named implementation lead',
+      'Everything in Growth',
+      'Unlimited brands and workspaces',
+      'Per-client voice and guardrails',
+      'White-label reporting',
+      'Named strategist on call',
     ],
     cta: 'Talk to us',
     featured: false,
@@ -49,48 +49,48 @@ const PLANS = [
 
 export default function Plans() {
   return (
-    <section id="plans" className="bg-band px-6 py-24 md:py-32">
+    <section id="plans" className="bg-ground px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Plans"
-          title="Pay for output, not seats"
-          lede="Workers are priced by the processes they run, so the bill tracks the work that came off your team's plate."
+          title="Priced like a team, not a tool"
+          lede="You are buying output — briefs written, drafts shipped, budgets managed. Not seats for people to log into."
         />
 
         <div className="mt-14 grid gap-4 lg:grid-cols-3">
           {PLANS.map((p) => (
             <article
               key={p.name}
-              className={`flex flex-col gap-6 rounded-xl p-7 md:p-8 ${
+              className={`flex flex-col gap-6 rounded-2xl p-7 md:p-8 ${
                 p.featured
-                  ? 'bg-[#1B133C] text-white shadow-[0px_8px_28px_rgba(27,19,60,0.18)]'
-                  : 'border border-[#1B133C]/10 bg-white/70 backdrop-blur-sm'
+                  ? 'bg-ink text-white shadow-[0px_16px_40px_-16px_rgba(27,19,60,0.4)]'
+                  : 'border border-hairline bg-white'
               }`}
             >
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-3">
                   <h3
-                    className={`eyebrow ${p.featured ? 'text-white/60' : 'text-[#1B133C]/45'}`}
+                    className={`label ${p.featured ? 'text-white/50' : 'text-ink-soft'}`}
                   >
                     {p.name}
                   </h3>
                   {p.featured && (
-                    <span className="rounded bg-orange-500 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+                    <span className="label rounded bg-flame px-2 py-1 text-white">
                       Most picked
                     </span>
                   )}
                 </div>
                 <p className="flex items-baseline gap-1">
                   <span
-                    className={`display text-4xl md:text-5xl tabular-nums ${
-                      p.featured ? 'text-white' : 'text-[#1B133C]'
+                    className={`display num text-4xl md:text-5xl ${
+                      p.featured ? 'text-white' : 'text-ink'
                     }`}
                   >
                     {p.price}
                   </span>
                   {p.cadence && (
                     <span
-                      className={`text-sm ${p.featured ? 'text-white/60' : 'text-[#1B133C]/55'}`}
+                      className={`text-sm ${p.featured ? 'text-white/50' : 'text-ink-soft'}`}
                     >
                       {p.cadence}
                     </span>
@@ -98,7 +98,7 @@ export default function Plans() {
                 </p>
                 <p
                   className={`text-sm leading-relaxed ${
-                    p.featured ? 'text-white/70' : 'text-[#1B133C]/70'
+                    p.featured ? 'text-white/70' : 'text-ink-soft'
                   }`}
                 >
                   {p.note}
@@ -111,10 +111,10 @@ export default function Plans() {
                     <span
                       aria-hidden="true"
                       className={`mt-[7px] h-1 w-1 shrink-0 rounded-full ${
-                        p.featured ? 'bg-orange-500' : 'bg-[#1B133C]/30'
+                        p.featured ? 'bg-flame' : 'bg-ink/25'
                       }`}
                     />
-                    <span className={p.featured ? 'text-white/80' : 'text-[#1B133C]/70'}>
+                    <span className={p.featured ? 'text-white/80' : 'text-ink-soft'}>
                       {f}
                     </span>
                   </li>
@@ -125,8 +125,8 @@ export default function Plans() {
                 type="button"
                 className={`mt-auto rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 ${
                   p.featured
-                    ? 'bg-[#FEFEFE] text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)]'
-                    : 'border border-[#1B133C]/15 text-[#1B133C] hover:bg-[#1B133C]/5'
+                    ? 'bg-flame text-white hover:bg-flame-deep'
+                    : 'border border-ink/15 text-ink hover:bg-ink/5'
                 }`}
               >
                 {p.cta}

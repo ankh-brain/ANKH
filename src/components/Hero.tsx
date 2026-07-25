@@ -1,13 +1,13 @@
 import Logo from './Logo'
 
 const HERO_VIDEO_URL =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260714_113715_c7e0daa0-8bdd-4486-a2da-040901f8f0ea.mp4'
+  'https://d8j0ntlcm91z4.cloudfront.net/user_388ZoOS6inn6vSmXTWLmRgxtMfT/hf_20260725_144502_10430d67-61b0-4f30-9288-2d27718a1bcb.mp4'
 
 const NAV_LINKS = [
-  { label: 'Features', href: '#features' },
+  { label: 'Team', href: '#team' },
+  { label: 'How it works', href: '#how' },
+  { label: 'Control', href: '#control' },
   { label: 'Plans', href: '#plans' },
-  { label: 'Security', href: '#security' },
-  { label: 'About', href: '#about' },
 ]
 
 export default function Hero() {
@@ -24,7 +24,7 @@ export default function Hero() {
           playsInline
         />
         {/* Blends the video's bottom edge into the page ground below. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#FBFAFE]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#FDFAF7]" />
       </div>
 
       {/* Navigation */}
@@ -38,7 +38,7 @@ export default function Hero() {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="text-sm font-medium text-[#1B133C]/80 hover:text-[#1B133C] transition-colors duration-200"
+                  className="text-sm font-medium text-ink/80 hover:text-ink transition-colors duration-200"
                 >
                   {link.label}
                 </a>
@@ -50,27 +50,27 @@ export default function Hero() {
 
       {/* Hero content */}
       <div className="relative z-10 mt-8 md:mt-16 flex flex-col items-center px-4 text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-[#1B133C]/10 bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-ink/10 bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium">
           <span className="flex w-5 h-5 items-center justify-center rounded bg-orange-500 text-xs font-bold text-white">
             Y
           </span>
           Funded by Y Combinator
         </div>
 
-        <h1 className="font-['Instrument_Serif'] text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-[#1B133C] max-w-4xl">
-          <span className="block">Deploy an AI workforce</span>
-          <span className="block">for mundane workflows</span>
+        <h1 className="font-['Instrument_Serif'] text-4xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight text-ink max-w-5xl">
+          <span className="block">An AI marketing team</span>
+          <span className="block">that ships every day</span>
         </h1>
 
-        <p className="mt-5 sm:mt-6 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#1B133C]/70">
-          Put an AI workforce on the browser work that eats your team's day.
-          Routine processes run themselves, so you add capacity without adding
-          headcount — and deliver more for clients, effortlessly.
+        <p className="mt-5 sm:mt-6 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed text-ink/70">
+          Sol runs your go-to-market like a CMO — sets the north star, briefs
+          every channel, and drops each draft in your queue with the reasoning
+          attached. You approve. The team ships.
         </p>
 
         <button
           type="button"
-          className="mt-7 sm:mt-8 rounded-xl bg-[#FEFEFE] px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)] transition-all duration-300"
+          className="mt-7 sm:mt-8 rounded-xl bg-flame px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-white shadow-[0px_4px_14px_rgba(242,107,29,0.4)] hover:bg-flame-deep hover:shadow-[0px_6px_18px_rgba(242,107,29,0.5)] transition-all duration-300"
         >
           Get Early Access
         </button>

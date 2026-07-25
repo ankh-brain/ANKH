@@ -1,45 +1,45 @@
 import Logo from './Logo'
 
 const FOOTER_LINKS = [
-  { label: 'Features', href: '#features' },
+  { label: 'The roster', href: '#team' },
+  { label: 'How it works', href: '#how' },
+  { label: 'Control', href: '#control' },
   { label: 'Plans', href: '#plans' },
-  { label: 'Security', href: '#security' },
-  { label: 'About', href: '#about' },
 ]
 
 export default function Closing() {
   return (
-    <footer id="about" className="bg-ground px-6 pb-12 pt-24 md:pt-32">
+    <footer id="about" className="bg-band px-6 pb-12 pt-24 md:pt-32">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col items-start gap-7 rounded-xl border border-[#1B133C]/10 bg-white/70 backdrop-blur-sm px-7 py-14 md:px-14 md:py-20">
-          <h2 className="display max-w-2xl text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-tight text-[#1B133C]">
-            Nobody was hired to fill in forms
+        <div className="flex flex-col items-start gap-7 rounded-2xl bg-ink px-7 py-14 text-white md:px-14 md:py-20">
+          <h2 className="display max-w-3xl text-3xl leading-[1.05] tracking-tight sm:text-4xl md:text-6xl">
+            Monday morning, eight briefs already written
           </h2>
-          <p className="max-w-xl text-sm md:text-base leading-relaxed text-[#1B133C]/70">
-            Tell us the process that eats the most hours this week. We will show
-            you the worker that runs it — built on your own screens, not a demo
-            dataset.
+          <p className="max-w-xl text-sm leading-relaxed text-white/70 md:text-base">
+            Point Sol at your site. It will come back with a north star, a
+            month of work against it, and the first three drafts — before you
+            have decided whether to hire anyone.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
-              className="rounded-xl bg-[#FEFEFE] px-6 sm:px-8 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] shadow-[0px_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0px_6px_16px_rgba(0,0,0,0.2)] transition-all duration-300"
+              className="rounded-xl bg-flame px-6 py-3 text-sm font-semibold text-white shadow-[0px_4px_12px_rgba(242,107,29,0.35)] transition-all duration-300 hover:bg-flame-deep sm:px-8 sm:py-3.5"
             >
               Get Early Access
             </button>
             <a
               href="#"
-              className="rounded-xl border border-[#1B133C]/15 px-6 py-3 sm:py-3.5 text-sm font-semibold text-[#1B133C] hover:bg-[#1B133C]/5 transition-colors duration-300"
+              className="rounded-xl border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white/10 sm:py-3.5"
             >
-              Talk to a founder
+              Hear Sol on a call
             </a>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-6 border-t border-[#1B133C]/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-6 border-t border-hairline pt-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <Logo />
-            <span className="display text-xl text-[#1B133C]">Axon</span>
+            <span className="display text-xl text-ink">Axon</span>
           </div>
           <nav>
             <ul className="flex flex-wrap items-center gap-6">
@@ -47,7 +47,7 @@ export default function Closing() {
                 <li key={l.label}>
                   <a
                     href={l.href}
-                    className="text-sm font-medium text-[#1B133C]/60 hover:text-[#1B133C] transition-colors duration-200"
+                    className="text-sm font-medium text-ink-soft transition-colors duration-200 hover:text-ink"
                   >
                     {l.label}
                   </a>
@@ -55,7 +55,7 @@ export default function Closing() {
               ))}
             </ul>
           </nav>
-          <p className="text-sm text-[#1B133C]/45">
+          <p className="text-sm text-ink-soft/70">
             © {new Date().getFullYear()} Axon Labs
           </p>
         </div>

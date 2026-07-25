@@ -1,16 +1,30 @@
 @import 'tailwindcss';
 
 @theme {
+  /* Ink stays the brand navy — it's what keeps the orange from going soft. */
   --color-ink: #1b133c;
-  --color-ground: #fbfafe;
-  --color-band: #f4f1fb;
-  --color-hairline: #ede8f7;
+  --color-ink-soft: #4a4066;
+
+  /* Accent lifted from the app's primary button and north-star bar. */
+  --color-flame: #f26b1d;
+  --color-flame-deep: #d9550c;
+  --color-ember: #fbead9;
+
+  /* Warm neutrals — biased toward the accent, not a default grey. */
+  --color-ground: #fdfaf7;
+  --color-band: #f8f1e9;
+  --color-hairline: #eee0d2;
+
+  /* Semantic, from the dashboard. Deliberately not the accent. */
+  --color-up: #16a34a;
+  --color-over: #dc2626;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  color: #1b133c;
-  background-color: #fbfafe;
+  color: var(--color-ink);
+  background-color: var(--color-ground);
+  -webkit-font-smoothing: antialiased;
 }
 
 html {
@@ -30,14 +44,20 @@ html {
   }
 }
 
-/* Display face: tighten the serif optically against Inter's larger x-height. */
 .display {
   font-family: 'Instrument Serif', serif;
   font-weight: 400;
   text-wrap: balance;
 }
 
-/* Utility face for eyebrows and small labels. */
+/* Inter in its instrument role: micro-labels on the data surfaces. */
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
 .eyebrow {
   font-size: 11px;
   font-weight: 600;
@@ -45,8 +65,13 @@ html {
   text-transform: uppercase;
 }
 
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
 :where(a, button):focus-visible {
-  outline: 2px solid #f97316;
+  outline: 2px solid var(--color-flame);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
