@@ -3,12 +3,15 @@ import LoopingVideo from './LoopingVideo'
 import SiteForm from './SiteForm'
 
 /**
- * 15s, 1920x1080. Generated from a single still passed as both the first and
- * last frame, so the clip ends on the frame it opened with and the loop has
- * nothing to jump across.
+ * 10s, 1920x1080, forward aerial travel.
+ *
+ * Seeded from a still as the FIRST frame only. An earlier cut pinned the same
+ * still as the last frame too, which forced the camera back to its origin and
+ * flattened the shot into a near-still image. LoopingVideo cross-fades the
+ * seam, so the clip does not need matching endpoints — don't pin the end frame.
  */
 const HERO_VIDEO_URL =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_388ZoOS6inn6vSmXTWLmRgxtMfT/hf_20260725_151041_6732cf5d-89d3-4486-a306-a51cdbdedd65.mp4'
+  'https://d8j0ntlcm91z4.cloudfront.net/user_388ZoOS6inn6vSmXTWLmRgxtMfT/hf_20260725_152524_1b902ad3-414c-4726-ba44-07dc96f5bf55.mp4'
 
 /** Shown while the video buffers, so the hero never flashes empty. */
 const HERO_POSTER_URL =
