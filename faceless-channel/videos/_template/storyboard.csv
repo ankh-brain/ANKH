@@ -1,0 +1,2 @@
+shot_id,start_tc,end_tc,duration_s,script_line,shot_description,camera_move,visual_style_ref,asset_type,asset_id,on_screen_text,transition_out,notes
+001,00:00:00,00:00:04,4,"","","","",generated_video,,"",cut,""

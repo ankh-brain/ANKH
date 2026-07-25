@@ -1,0 +1,2 @@
+asset_id,shot_ids,type,source,prompt_or_brief,model_or_tool,aspect_ratio,duration_s,est_cost,status,output_path,license,approved_gate
+,,generated_video,,,,16:9,,,planned,06-video-clips/,,G3
