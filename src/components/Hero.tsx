@@ -32,6 +32,10 @@ export default function Hero() {
         <LoopingVideo
           src={HERO_VIDEO_URL}
           poster={HERO_POSTER_URL}
+          // The render's camera travels faster than a hero wants. Slowing
+          // playback calms it without another generation: 10s of clip becomes
+          // ~17s of drift.
+          playbackRate={0.6}
           className="w-full h-[130%] object-cover object-top"
         />
       </div>
