@@ -4,6 +4,7 @@ const FADE_SECONDS = 1.2
 
 type Props = {
   src: string
+  poster?: string
   className?: string
 }
 
@@ -16,7 +17,7 @@ type Props = {
  * ending into one that has already started playing — the swap happens while
  * both are decoding, so there is nothing to stall on.
  */
-export default function LoopingVideo({ src, className = '' }: Props) {
+export default function LoopingVideo({ src, poster, className = '' }: Props) {
   const layers = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)]
   const [front, setFront] = useState(0)
   const handingOver = useRef(false)
@@ -65,6 +66,7 @@ export default function LoopingVideo({ src, className = '' }: Props) {
             transitionDuration: `${FADE_SECONDS * 1000}ms`,
           }}
           src={src}
+          poster={i === 0 ? poster : undefined}
           autoPlay={i === 0}
           muted
           playsInline
