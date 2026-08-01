@@ -1,0 +1,11 @@
+# Contains the encryption key and the public hostname. Never commit.
+.env
+.env.bak.*
+
+# Nightly snapshots: database copies and (optionally) plaintext credentials.
+backups/
+
+# Local reverse-proxy configs derived from the examples.
+reverse-proxy/*.conf
+reverse-proxy/Caddyfile
+!reverse-proxy/*.example

@@ -1,0 +1,69 @@
+# n8n vhost for nginx. Copy into your existing setup (sites-available,
+# conf.d, wherever you keep them) and change n8n.example.com.
+#
+# You already have a reverse proxy, so the only bits that are actually
+# n8n-specific are marked below: the WebSocket upgrade and the long timeouts.
+# Get those wrong and the symptom is subtle — the editor loads fine, then
+# stops showing execution progress, or long workflows die at 60 seconds.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name n8n.example.com;
+
+    # Leave whatever ACME challenge location your certificate tooling needs.
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name n8n.example.com;
+
+    ssl_certificate     /etc/letsencrypt/live/n8n.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/n8n.example.com/privkey.pem;
+
+    # Webhooks that carry file uploads. Raise if you push bigger payloads;
+    # n8n's own limit is N8N_PAYLOAD_SIZE_MAX (16 MB by default).
+    client_max_body_size 32m;
+
+    # n8n serves the editor to logged-in users only, but there is no reason
+    # for it to be indexable or framed.
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+    access_log /var/log/nginx/n8n.access.log;
+    error_log  /var/log/nginx/n8n.error.log;
+
+    location / {
+        proxy_pass http://127.0.0.1:5678;
+        proxy_http_version 1.1;
+
+        # --- n8n-specific #1 -------------------------------------------------
+        # The editor holds a WebSocket open for push updates. Without these
+        # two headers the UI loads and then silently stops updating.
+        proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host  $host;
+
+        # --- n8n-specific #2 -------------------------------------------------
+        # A workflow that talks to a slow API can legitimately run for
+        # minutes. nginx's 60s default would cut it off mid-execution.
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+
+        # Stream responses through rather than buffering them; this is what
+        # makes the execution log update live.
+        proxy_buffering off;
+        proxy_cache off;
+    }
+}

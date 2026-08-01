@@ -1,0 +1,115 @@
+{
+  "id": "starter0webhooktg01",
+  "name": "Starter — webhook to Telegram alert",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "tags": [],
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alert",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2b0d0e20-0002-4b00-8b00-000000000001",
+      "name": "POST /webhook/alert",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        0
+      ],
+      "webhookId": "2b0d0e20-0002-4b00-8b00-0000000000ff",
+      "notes": "Production URL is WEBHOOK_URL + /webhook/alert once activated."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Gate on a shared secret, then flatten the payload into one line of text.\n//\n// The webhook path is public: anything on the internet can POST to it. This\n// header check is what stops strangers pushing messages into your Telegram.\n// Replace the placeholder with a long random string, e.g.\n//   openssl rand -hex 32\n// and keep the same value in whatever service calls this webhook.\nconst EXPECTED_TOKEN = 'replace-me-openssl-rand-hex-32';\n\nconst request = $input.first().json;\nconst headers = request.headers || {};\n// Header names arrive lower-cased.\nconst presented = headers['x-alert-token'];\n\nif (EXPECTED_TOKEN === 'replace-me-openssl-rand-hex-32') {\n  throw new Error('Set EXPECTED_TOKEN in this node before activating the workflow.');\n}\n\nif (presented !== EXPECTED_TOKEN) {\n  throw new Error('Unauthorised: missing or wrong X-Alert-Token header');\n}\n\nconst body = request.body || {};\n\nconst level = String(body.level || 'info').toUpperCase();\nconst icon = { INFO: 'i', WARN: '!', ERROR: 'X' }[level] || 'i';\nconst source = String(body.source || 'unknown');\nconst message = typeof body.message === 'string'\n  ? body.message\n  : JSON.stringify(body);\n\n// Plain text on purpose: no parse_mode, so a stray * or _ in an alert can't\n// make Telegram reject the whole message.\nconst text = [\n  `[${icon}] ${level} - ${source}`,\n  message,\n  `at ${new Date().toISOString()}`,\n].join('\\n');\n\nreturn [{ json: { text, level, source } }];\n"
+      },
+      "id": "2b0d0e20-0002-4b00-8b00-000000000002",
+      "name": "Verify token and format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "REPLACE_WITH_YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "2b0d0e20-0002-4b00-8b00-000000000003",
+      "name": "Send Telegram alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        0
+      ],
+      "notes": "Attach a Telegram bot credential; message @userinfobot for your chat id."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"ok\": true, \"level\": $('Verify token and format').first().json.level } }}",
+        "options": {}
+      },
+      "id": "2b0d0e20-0002-4b00-8b00-000000000004",
+      "name": "Respond 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        420,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "POST /webhook/alert": {
+      "main": [
+        [
+          {
+            "node": "Verify token and format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify token and format": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Telegram alert": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

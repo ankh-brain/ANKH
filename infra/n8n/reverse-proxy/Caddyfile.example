@@ -1,0 +1,32 @@
+# n8n site block for Caddy. Change the hostname and drop it into your
+# existing Caddyfile.
+#
+# Caddy handles TLS, the WebSocket upgrade and X-Forwarded-* on its own, so
+# there is much less to get wrong here than with nginx. The one thing worth
+# setting explicitly is the timeout: a workflow calling a slow API can run
+# for minutes.
+
+n8n.example.com {
+	encode zstd gzip
+
+	header {
+		X-Frame-Options SAMEORIGIN
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+
+	reverse_proxy 127.0.0.1:5678 {
+		# Stream responses straight through, so the execution log in the
+		# editor updates live instead of arriving in one lump.
+		flush_interval -1
+
+		transport http {
+			read_timeout 3600s
+			write_timeout 3600s
+		}
+	}
+
+	log {
+		output file /var/log/caddy/n8n.log
+	}
+}

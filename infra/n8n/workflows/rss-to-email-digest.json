@@ -1,0 +1,118 @@
+{
+  "id": "starter0rssdigest01",
+  "name": "Starter — RSS to email digest",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "tags": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 7,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "1a0d0e10-0001-4a00-8a00-000000000001",
+      "name": "Every day at 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        0
+      ],
+      "notes": "Fires in GENERIC_TIMEZONE from .env."
+    },
+    {
+      "parameters": {
+        "url": "https://hnrss.org/frontpage",
+        "options": {}
+      },
+      "id": "1a0d0e10-0001-4a00-8a00-000000000002",
+      "name": "Read RSS feed",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        -20,
+        0
+      ],
+      "notes": "Swap this URL for a feed you actually read."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Collapse today's feed items into one email.\n// Runs once for all items: the RSS node emits one item per article, this\n// node emits a single item carrying the finished subject and HTML body.\n\nconst MAX_ITEMS = 15;\nconst WINDOW_HOURS = 24;\nconst cutoff = Date.now() - WINDOW_HOURS * 60 * 60 * 1000;\n\nconst articles = $input.all()\n  .map((entry) => entry.json)\n  .filter((article) => {\n    // Feeds that omit or mangle the date still get through; better a\n    // duplicate in the digest than a silently dropped article.\n    const published = Date.parse(article.isoDate || article.pubDate || '');\n    return Number.isNaN(published) ? true : published >= cutoff;\n  })\n  .slice(0, MAX_ITEMS);\n\n// Returning nothing ends this branch, so no email is sent on a quiet day.\nif (articles.length === 0) {\n  return [];\n}\n\nconst escapeHtml = (value) =>\n  String(value ?? '').replace(/[&<>\"]/g, (char) => ({\n    '&': '&amp;',\n    '<': '&lt;',\n    '>': '&gt;',\n    '\"': '&quot;',\n  })[char]);\n\nconst listItems = articles\n  .map((article) => {\n    const title = escapeHtml(article.title || 'Untitled');\n    const link = escapeHtml(article.link || '#');\n    const when = article.isoDate ? new Date(article.isoDate).toUTCString() : '';\n    const stamp = when ? ` <span style=\"color:#888\">&mdash; ${escapeHtml(when)}</span>` : '';\n    return `  <li style=\"margin-bottom:8px\"><a href=\"${link}\">${title}</a>${stamp}</li>`;\n  })\n  .join('\\n');\n\nconst today = new Date().toISOString().slice(0, 10);\n\nconst html = [\n  '<div style=\"font-family:system-ui,-apple-system,sans-serif;max-width:640px\">',\n  `  <h2 style=\"margin-bottom:4px\">Daily digest &mdash; ${today}</h2>`,\n  `  <p style=\"color:#666;margin-top:0\">${articles.length} item(s) in the last ${WINDOW_HOURS} hours.</p>`,\n  '  <ul style=\"padding-left:18px\">',\n  listItems,\n  '  </ul>',\n  '</div>',\n].join('\\n');\n\nreturn [\n  {\n    json: {\n      subject: `Daily digest — ${articles.length} new item(s)`,\n      html,\n      count: articles.length,\n    },\n  },\n];\n"
+      },
+      "id": "1a0d0e10-0001-4a00-8a00-000000000003",
+      "name": "Build digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "n8n@example.com",
+        "toEmail": "you@example.com",
+        "subject": "={{ $json.subject }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "1a0d0e10-0001-4a00-8a00-000000000004",
+      "name": "Send digest email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        420,
+        0
+      ],
+      "notes": "Attach an SMTP credential and set real addresses before activating."
+    }
+  ],
+  "connections": {
+    "Every day at 07:00": {
+      "main": [
+        [
+          {
+            "node": "Read RSS feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read RSS feed": {
+      "main": [
+        [
+          {
+            "node": "Build digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build digest": {
+      "main": [
+        [
+          {
+            "node": "Send digest email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,89 @@
+name: n8n
+
+services:
+  n8n:
+    # Pinned by tag in .env. Never :latest — see scripts/update.sh.
+    image: docker.n8n.io/n8nio/n8n:${N8N_IMAGE_TAG:?N8N_IMAGE_TAG is not set. Pin an explicit version in .env, e.g. 2.32.7}
+    # Overridable so a restore drill can run a second, throwaway stack
+    # alongside the real one (see README, "Restore drill").
+    container_name: ${N8N_CONTAINER_NAME:-n8n}
+    restart: unless-stopped
+
+    # Loopback only. TLS, the public hostname and any IP allow-listing are the
+    # reverse proxy's job; nothing here is reachable from outside the box.
+    ports:
+      - "127.0.0.1:${N8N_BIND_PORT:-5678}:5678"
+
+    environment:
+      # --- Identity / secrets ------------------------------------------------
+      # Encrypts every stored credential. Lose it and the credentials are dead.
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?N8N_ENCRYPTION_KEY is not set. Generate one and back it up before first boot}
+
+      # --- Public addressing (behind the reverse proxy) ----------------------
+      N8N_HOST: ${N8N_HOST:?N8N_HOST is not set, e.g. n8n.example.com}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: https
+      N8N_EDITOR_BASE_URL: https://${N8N_HOST}
+      # Production webhook base. External services call this, so it must be the
+      # public HTTPS subdomain, not localhost.
+      WEBHOOK_URL: https://${N8N_HOST}/
+      # Number of proxies in front of n8n. 1 = your reverse proxy. Without this
+      # n8n sees every request as coming from the proxy's IP.
+      N8N_PROXY_HOPS: ${N8N_PROXY_HOPS:-1}
+      N8N_SECURE_COOKIE: "true"
+
+      # --- Access control ----------------------------------------------------
+      # n8n's built-in user management guards the editor. The first account
+      # created on first boot is the instance owner. Keep this false.
+      N8N_USER_MANAGEMENT_DISABLED: "false"
+
+      # --- Storage -----------------------------------------------------------
+      # SQLite lives in the named volume at /home/node/.n8n/database.sqlite.
+      DB_TYPE: sqlite
+      DB_SQLITE_POOL_SIZE: ${DB_SQLITE_POOL_SIZE:-1}
+      # Keep large binaries out of SQLite; they go to disk in the same volume.
+      N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+
+      # --- Execution history retention (stops SQLite growing forever) --------
+      EXECUTIONS_DATA_PRUNE: "true"
+      EXECUTIONS_DATA_MAX_AGE: ${EXECUTIONS_DATA_MAX_AGE:-336}
+      EXECUTIONS_DATA_PRUNE_MAX_COUNT: ${EXECUTIONS_DATA_PRUNE_MAX_COUNT:-10000}
+
+      # --- Runtime / misc ----------------------------------------------------
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE:-Etc/UTC}
+      TZ: ${GENERIC_TIMEZONE:-Etc/UTC}
+      N8N_RUNNERS_ENABLED: "true"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "true"
+      # Leave on: it is how you find out a new version exists.
+      N8N_VERSION_NOTIFICATIONS_ENABLED: "true"
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_HIRING_BANNER_ENABLED: "false"
+      N8N_LOG_LEVEL: ${N8N_LOG_LEVEL:-info}
+
+    volumes:
+      # Everything that matters: SQLite DB, encryption-key-derived settings
+      # file, binary data, custom nodes.
+      - n8n_data:/home/node/.n8n
+      # Starter workflow JSON, read-only, for scripts/import-workflows.sh.
+      - ./workflows:/workflows:ro
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+    # Container logs are not a backup and should not fill the disk.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  n8n_data:
+    # Explicit name so backup/restore scripts and `docker volume` commands
+    # refer to the same thing regardless of project directory name.
+    name: ${N8N_VOLUME_NAME:-n8n_data}
