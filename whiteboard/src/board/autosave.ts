@@ -1,40 +1,11 @@
 import { getSnapshot, type Editor } from 'tldraw'
 import { api, saveSnapshotBeacon } from '../api'
+import { makeThumbnail } from './thumbnail'
 
 /** Debounce window: we save 2 seconds after the last change. */
 export const AUTOSAVE_DELAY_MS = 2000
 
-/** Thumbnails are for the board picker, so they only need to be card-sized. */
-const THUMBNAIL_MAX_PX = 400
-
 export type SaveState = 'idle' | 'pending' | 'saving' | 'saved' | 'error'
-
-async function makeThumbnail(editor: Editor): Promise<string | null> {
-  const shapeIds = [...editor.getCurrentPageShapeIds()]
-  if (shapeIds.length === 0) return null
-
-  const bounds = editor.getCurrentPageBounds()
-  if (!bounds) return null
-
-  // Scale so the long edge lands near THUMBNAIL_MAX_PX rather than exporting a
-  // full-resolution image of the whole board on every autosave.
-  const scale = Math.min(1, THUMBNAIL_MAX_PX / Math.max(bounds.width, bounds.height))
-
-  try {
-    const result = await editor.toImageDataUrl(shapeIds, {
-      format: 'png',
-      background: true,
-      padding: 16,
-      scale,
-      pixelRatio: 1,
-      darkMode: false,
-    })
-    return result?.url ?? null
-  } catch (error) {
-    console.warn('[whiteboard] thumbnail failed', error)
-    return null
-  }
-}
 
 /**
  * Wires debounced autosave onto an editor. Returns a disposer plus a `flush`

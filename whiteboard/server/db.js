@@ -56,6 +56,7 @@ const statements = {
   updateSnapshot: db.prepare(
     `UPDATE boards SET snapshot = ?, thumbnail = COALESCE(?, thumbnail), updated_at = ? WHERE id = ?`
   ),
+  updateThumbnail: db.prepare(`UPDATE boards SET thumbnail = ? WHERE id = ?`),
   insertRevision: db.prepare(
     `INSERT INTO revisions (board_id, created_at, snapshot) VALUES (?, ?, ?)`
   ),
@@ -132,6 +133,15 @@ export const saveSnapshot = db.transaction((id, snapshot, thumbnail) => {
   statements.updateSnapshot.run(JSON.stringify(snapshot), thumbnail ?? null, now, id)
   return { id, updatedAt: now }
 })
+
+/**
+ * Thumbnails always come from a browser, because only a browser can render the
+ * canvas. In shared mode the snapshot is saved server-side from the sync room,
+ * so the thumbnail arrives on its own.
+ */
+export function saveThumbnail(id, thumbnail) {
+  return statements.updateThumbnail.run(thumbnail, id).changes > 0
+}
 
 export function listRevisions(id) {
   return statements.listRevisions

@@ -7,7 +7,8 @@ doesn't have opinions about: named boards, autosave to SQLite, revision history,
 disk exports, and templates.
 
 No accounts, no telemetry, no cloud. It binds to `127.0.0.1` and works with the
-network unplugged.
+network unplugged. If you want, one other person on your network can join a
+board with you — that's opt-in and off by default.
 
 ## Running it
 
@@ -31,7 +32,8 @@ npm start            # serves the app *and* the API on http://localhost:4900
 | --- | --- |
 | `npm run dev` | Vite dev server on 4900 + API on 4901, hot reload |
 | `npm run build` | `tsc --noEmit` then a production bundle into `dist/` |
-| `npm start` | Serves `dist/` and the API together on 4900 |
+| `npm start` | Serves `dist/` and the API together on 4900, loopback only |
+| `npm run share` | Same, but also reachable on your network — see [Sharing](#sharing-with-one-other-person) |
 | `npm run server` | The API alone (same as `npm start`) |
 
 ## Where your data lives
@@ -110,17 +112,18 @@ Shipped: `retro-grid`, `brainstorm-columns`, `weekly-plan`.
 ```
 whiteboard/
 ├─ server/
-│  ├─ index.js       Express API + static hosting, loopback only
+│  ├─ index.js       Express API + static hosting, loopback unless sharing
 │  ├─ db.js          SQLite schema, snapshot saves, revision pruning
+│  ├─ sync.js        Sync rooms, two-seat limit, server-side persistence
 │  ├─ templates.js   Reads templates/*.json
 │  └─ paths.js       Where the database and exports live
 ├─ src/
 │  ├─ App.tsx        Hash router: #/ picker, #/b/<id> board
 │  ├─ api.ts         Typed fetch wrappers
-│  ├─ board/         Autosave, template application, export, context
-│  └─ components/    BoardPicker, BoardEditor, BoardPanel
+│  ├─ board/         Autosave, templates, export, thumbnails, assets
+│  └─ components/    BoardPicker, BoardEditor, SoloCanvas, SharedCanvas, BoardPanel
 ├─ templates/        Template JSON, read at runtime
-└─ scripts/dev.mjs   Runs the API and Vite together
+└─ scripts/          dev.mjs (API + Vite), share.mjs (sharing on)
 ```
 
 ## Notes
@@ -130,23 +133,44 @@ whiteboard/
   build instead (`@tldraw/assets`), so the app makes no external requests at all.
 - **The tldraw watermark** in the bottom-right corner comes with the free SDK
   license. Removing it requires a commercial license from tldraw.
-- **Sharing with one other person is not implemented.** See below.
+- **Sharing is off unless you ask for it.** `npm start` binds to loopback and
+  never opens a WebSocket.
 
-## Not built: two-person sharing
+## Sharing with one other person
 
-The optional share-over-my-private-network mode was time-boxed to an hour and
-skipped, because it isn't an hour's work. It needs a `@tldraw/sync-core`
-`TLSocketRoom` behind a WebSocket server, a client switched over to `useSync`,
-and — the actual cost — a rewrite of the save path: the sync room becomes the
-owner of the document, so the debounced snapshot autosave and the revision
-history both have to be re-plumbed through the room rather than the editor
-store. It also means binding to `0.0.0.0` instead of loopback, which is a
-deliberate change to the security posture of an app whose whole premise is that
-it's local. Doing that halfway is worse than not doing it, so nothing here is
-half-wired for it — it's a clean addition when you want it.
+```bash
+npm run share
+```
 
-In the meantime, exporting a PNG and sending it covers most of what one would
-have wanted it for.
+That's the only difference: the server binds to your LAN address as well as
+loopback, and opens a sync WebSocket. It prints the address to send the other
+person, and the board picker shows it too. They open the same URL, click the
+same board, and you're both on it — shapes, selections and cursors in real time,
+built on `@tldraw/sync`.
+
+**Boards seat two.** A third person gets turned away with "That board is full"
+rather than silently joining. A seat frees up a few seconds after someone closes
+their tab; reloading your own tab keeps your seat rather than locking you out of
+your own board.
+
+While sharing is on:
+
+- **The server saves, not the browser.** The sync room owns the document, so it
+  writes the snapshot to SQLite 2 seconds after the last change — the same
+  rhythm as solo autosave, and into the same table, so revision history works
+  exactly as it does alone. The browser only sends thumbnails, which are the one
+  thing a server can't render.
+- **Rolling back reaches both of you.** `History` goes through the server, which
+  pushes the restored state into the live room. You won't end up looking at
+  different boards.
+- **Pasted images are written to disk** (`~/.whiteboard/assets/`) and served
+  from the API, because the other person's browser has to be able to fetch them.
+  Solo boards do the same, so a board is portable between the two modes.
+
+**There is no authentication.** Anyone who can reach that port on your network
+can open your boards and edit them. That is the tradeoff you're making when you
+run `npm run share` instead of `npm start`, and it's why sharing isn't the
+default — run it on a network you trust, and stop it when you're done.
 
 ## Out of scope, on purpose
 

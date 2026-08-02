@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { api } from '../api'
-import type { BoardSummary, Template } from '../types'
+import type { BoardSummary, ShareInfo, Template } from '../types'
 
 function formatUpdated(timestamp: number) {
   const date = new Date(timestamp)
@@ -19,6 +19,7 @@ export function BoardPicker() {
   const [renameValue, setRenameValue] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [where, setWhere] = useState<{ database: string; exports: string } | null>(null)
+  const [share, setShare] = useState<ShareInfo | null>(null)
 
   const refresh = useCallback(async () => {
     try {
@@ -33,6 +34,7 @@ export function BoardPicker() {
     void refresh()
     api.listTemplates().then(setTemplates).catch(() => setTemplates([]))
     api.where().then(setWhere).catch(() => setWhere(null))
+    api.share().then(setShare).catch(() => setShare(null))
   }, [refresh])
 
   const createBoard = useCallback(async () => {
@@ -83,6 +85,14 @@ export function BoardPicker() {
       </header>
 
       {error && <p className="error">{error}</p>}
+
+      {share?.enabled && (
+        <p className="share-banner">
+          <strong>Sharing is on.</strong> One other person can join a board with you — send them{' '}
+          <code>{share.url ?? 'this machine\u2019s address on your network'}</code>. Boards seat{' '}
+          {share.maxPeers}.
+        </p>
+      )}
 
       <section className="new-board">
         <div className="new-board__row">

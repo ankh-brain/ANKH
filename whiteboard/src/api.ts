@@ -1,4 +1,4 @@
-import type { Board, BoardSummary, Revision, Template } from './types'
+import type { Board, BoardSummary, Revision, ShareInfo, Template } from './types'
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, {
@@ -33,6 +33,22 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify({ snapshot, thumbnail }),
     }),
+
+  saveThumbnail: (id: string, thumbnail: string) =>
+    request<void>(`/api/boards/${id}/thumbnail`, {
+      method: 'PUT',
+      body: JSON.stringify({ thumbnail }),
+    }),
+
+  restoreRevision: (id: string, revisionId: number) =>
+    request<{ restored: number; appliedToRoom: boolean }>(`/api/boards/${id}/restore`, {
+      method: 'POST',
+      body: JSON.stringify({ revisionId }),
+    }),
+
+  share: () => request<ShareInfo>('/api/share'),
+
+  peers: (id: string) => request<{ peers: number; max: number }>(`/api/boards/${id}/peers`),
 
   listRevisions: (id: string) =>
     request<{ kept: number; revisions: Revision[] }>(`/api/boards/${id}/revisions`),

@@ -7,6 +7,9 @@ export interface BoardContextValue {
   saveState: SaveState
   /** Flushes any pending autosave — used before exporting and before restoring. */
   flush: () => Promise<void>
+  /** True when this board is backed by a sync room rather than local autosave. */
+  shared: boolean
+  connection: 'connecting' | 'online' | 'error'
 }
 
 const BoardContext = createContext<BoardContextValue | null>(null)

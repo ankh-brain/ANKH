@@ -410,3 +410,12 @@ code {
   font-weight: 600;
   font-size: 13px;
 }
+
+.share-banner {
+  border: 1px solid rgba(108, 140, 255, 0.4);
+  background: rgba(108, 140, 255, 0.08);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--text);
+}

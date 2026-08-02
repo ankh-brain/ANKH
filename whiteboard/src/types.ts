@@ -36,3 +36,11 @@ export interface Template {
   order?: number
   shapes: TemplateShape[]
 }
+
+export interface ShareInfo {
+  /** True when the server was started with sharing switched on. */
+  enabled: boolean
+  maxPeers: number
+  /** The address the other person types in, e.g. http://192.168.1.20:4900 */
+  url: string | null
+}

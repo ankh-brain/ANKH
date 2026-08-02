@@ -14,6 +14,12 @@ const SAVE_LABELS: Record<SaveState, string> = {
   error: 'Save failed — retrying',
 }
 
+const CONNECTION_LABELS = {
+  connecting: 'Connecting…',
+  online: 'Shared',
+  error: 'Disconnected',
+} as const
+
 function timeAgo(timestamp: number) {
   const seconds = Math.max(0, Math.round((Date.now() - timestamp) / 1000))
   if (seconds < 60) return `${seconds}s ago`
@@ -40,6 +46,8 @@ export function BoardPanel() {
   const boardName = board?.boardName ?? ''
   const saveState: SaveState = board?.saveState ?? 'idle'
   const flush = board?.flush
+  const shared = board?.shared ?? false
+  const connection = board?.connection ?? 'online'
 
   useEffect(() => {
     if (!message) return
@@ -80,8 +88,14 @@ export function BoardPanel() {
         // Flush first so the state we're leaving becomes a revision of its own —
         // restoring is itself undoable.
         await flush?.()
-        const { snapshot } = await api.getRevision(boardId, revision.id)
-        loadSnapshot(editor.store, snapshot as Parameters<typeof loadSnapshot>[1])
+        if (shared) {
+          // The room owns the document, so the rollback has to come from the
+          // server — it reaches the other person too.
+          await api.restoreRevision(boardId, revision.id)
+        } else {
+          const { snapshot } = await api.getRevision(boardId, revision.id)
+          loadSnapshot(editor.store, snapshot as Parameters<typeof loadSnapshot>[1])
+        }
         setHistoryOpen(false)
         setMessage(`Restored the version from ${timeAgo(revision.createdAt)}`)
       } catch (error) {
@@ -90,7 +104,7 @@ export function BoardPanel() {
         setBusy(null)
       }
     },
-    [boardId, editor, flush]
+    [boardId, editor, flush, shared]
   )
 
   if (!board) return null
@@ -105,7 +119,7 @@ export function BoardPanel() {
           {boardName}
         </span>
         <span className={`board-panel__status board-panel__status--${saveState}`}>
-          {SAVE_LABELS[saveState]}
+          {shared ? CONNECTION_LABELS[connection] : SAVE_LABELS[saveState]}
         </span>
         <button
           className="board-panel__button"
