@@ -35,6 +35,23 @@ npm start            # serves the app *and* the API on http://localhost:4900
 | `npm start` | Serves `dist/` and the API together on 4900, loopback only |
 | `npm run share` | Same, but also reachable on your network — see [Sharing](#sharing-with-one-other-person) |
 | `npm run server` | The API alone (same as `npm start`) |
+| `npm run preview:build` | One self-contained HTML file for looking at the UI elsewhere — see [Previewing](#previewing-without-running-it) |
+
+## Previewing without running it
+
+```bash
+npm run preview:build     # → preview/whiteboard-preview.html
+```
+
+That produces a single HTML file you can open straight off disk, or send to
+another machine, with no server and no network. Fonts and icons are inlined as
+data URIs and the API is swapped for a localStorage stand-in, so the canvas,
+board picker, templates, thumbnails and revision history all work.
+
+It's for showing someone the UI, not for using. Boards live in that browser's
+localStorage (and hit its ~5MB quota quickly), `Export` downloads the PNG and
+SVG instead of writing them to `~/Whiteboards`, and sharing is off because there
+is no server to share through. Run the real thing for real work.
 
 ## Where your data lives
 

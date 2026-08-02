@@ -10,7 +10,8 @@
     "build": "tsc --noEmit && vite build",
     "start": "node server/index.js",
     "share": "node scripts/share.mjs",
-    "server": "node server/index.js"
+    "server": "node server/index.js",
+    "preview:build": "node scripts/build-preview.mjs"
   },
   "dependencies": {
     "@tldraw/assets": "^5.2.5",
