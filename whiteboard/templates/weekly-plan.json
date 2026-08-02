@@ -1,0 +1,184 @@
+{
+  "id": "weekly-plan",
+  "name": "Weekly plan",
+  "description": "Mon–Fri lanes with a focus banner and a someday shelf.",
+  "order": 3,
+  "shapes": [
+    {
+      "id": "week-title",
+      "type": "text",
+      "x": 80,
+      "y": 40,
+      "text": "Week of",
+      "props": { "size": "xl", "color": "black", "font": "sans" }
+    },
+    {
+      "id": "week-focus",
+      "type": "geo",
+      "x": 80,
+      "y": 120,
+      "props": {
+        "geo": "rectangle",
+        "w": 1400,
+        "h": 110,
+        "fill": "semi",
+        "color": "yellow",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-focus-label",
+      "type": "text",
+      "x": 104,
+      "y": 144,
+      "text": "One thing that must land this week:",
+      "props": { "size": "s", "color": "orange", "font": "sans" }
+    },
+    {
+      "id": "week-mon",
+      "type": "geo",
+      "x": 80,
+      "y": 270,
+      "props": {
+        "geo": "rectangle",
+        "w": 260,
+        "h": 560,
+        "fill": "none",
+        "color": "grey",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-mon-label",
+      "type": "text",
+      "x": 104,
+      "y": 292,
+      "text": "Mon",
+      "props": { "size": "m", "color": "black", "font": "sans" }
+    },
+    {
+      "id": "week-tue",
+      "type": "geo",
+      "x": 366,
+      "y": 270,
+      "props": {
+        "geo": "rectangle",
+        "w": 260,
+        "h": 560,
+        "fill": "none",
+        "color": "grey",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-tue-label",
+      "type": "text",
+      "x": 390,
+      "y": 292,
+      "text": "Tue",
+      "props": { "size": "m", "color": "black", "font": "sans" }
+    },
+    {
+      "id": "week-wed",
+      "type": "geo",
+      "x": 652,
+      "y": 270,
+      "props": {
+        "geo": "rectangle",
+        "w": 260,
+        "h": 560,
+        "fill": "none",
+        "color": "grey",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-wed-label",
+      "type": "text",
+      "x": 676,
+      "y": 292,
+      "text": "Wed",
+      "props": { "size": "m", "color": "black", "font": "sans" }
+    },
+    {
+      "id": "week-thu",
+      "type": "geo",
+      "x": 938,
+      "y": 270,
+      "props": {
+        "geo": "rectangle",
+        "w": 260,
+        "h": 560,
+        "fill": "none",
+        "color": "grey",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-thu-label",
+      "type": "text",
+      "x": 962,
+      "y": 292,
+      "text": "Thu",
+      "props": { "size": "m", "color": "black", "font": "sans" }
+    },
+    {
+      "id": "week-fri",
+      "type": "geo",
+      "x": 1224,
+      "y": 270,
+      "props": {
+        "geo": "rectangle",
+        "w": 260,
+        "h": 560,
+        "fill": "none",
+        "color": "grey",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-fri-label",
+      "type": "text",
+      "x": 1248,
+      "y": 292,
+      "text": "Fri",
+      "props": { "size": "m", "color": "black", "font": "sans" }
+    },
+    {
+      "id": "week-someday",
+      "type": "geo",
+      "x": 80,
+      "y": 870,
+      "props": {
+        "geo": "rectangle",
+        "w": 1400,
+        "h": 200,
+        "fill": "none",
+        "color": "grey",
+        "dash": "dashed",
+        "size": "s"
+      }
+    },
+    {
+      "id": "week-someday-label",
+      "type": "text",
+      "x": 104,
+      "y": 890,
+      "text": "Someday / not this week",
+      "props": { "size": "s", "color": "grey", "font": "sans" }
+    },
+    {
+      "id": "week-note-1",
+      "type": "note",
+      "x": 112,
+      "y": 350,
+      "props": { "color": "yellow", "size": "s" }
+    }
+  ]
+}

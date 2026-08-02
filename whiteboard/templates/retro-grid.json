@@ -1,0 +1,158 @@
+{
+  "id": "retro-grid",
+  "name": "Retro grid",
+  "description": "Went well / Didn't go well / Try next, with a parking lot.",
+  "order": 1,
+  "shapes": [
+    {
+      "id": "retro-title",
+      "type": "text",
+      "x": 80,
+      "y": 40,
+      "text": "Retro",
+      "props": {
+        "size": "xl",
+        "color": "black",
+        "font": "sans"
+      }
+    },
+    {
+      "id": "retro-col-1",
+      "type": "geo",
+      "x": 80,
+      "y": 140,
+      "props": {
+        "geo": "rectangle",
+        "w": 400,
+        "h": 620,
+        "fill": "semi",
+        "color": "light-green",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-col-1-label",
+      "type": "text",
+      "x": 104,
+      "y": 164,
+      "text": "Went well",
+      "props": {
+        "size": "m",
+        "color": "green",
+        "font": "sans"
+      }
+    },
+    {
+      "id": "retro-col-2",
+      "type": "geo",
+      "x": 520,
+      "y": 140,
+      "props": {
+        "geo": "rectangle",
+        "w": 400,
+        "h": 620,
+        "fill": "semi",
+        "color": "light-red",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-col-2-label",
+      "type": "text",
+      "x": 544,
+      "y": 164,
+      "text": "Didn't go well",
+      "props": {
+        "size": "m",
+        "color": "red",
+        "font": "sans"
+      }
+    },
+    {
+      "id": "retro-col-3",
+      "type": "geo",
+      "x": 960,
+      "y": 140,
+      "props": {
+        "geo": "rectangle",
+        "w": 400,
+        "h": 620,
+        "fill": "semi",
+        "color": "light-blue",
+        "dash": "solid",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-col-3-label",
+      "type": "text",
+      "x": 984,
+      "y": 164,
+      "text": "Try next",
+      "props": {
+        "size": "m",
+        "color": "blue",
+        "font": "sans"
+      }
+    },
+    {
+      "id": "retro-note-1",
+      "type": "note",
+      "x": 116,
+      "y": 240,
+      "props": {
+        "color": "green",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-note-2",
+      "type": "note",
+      "x": 556,
+      "y": 240,
+      "props": {
+        "color": "red",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-note-3",
+      "type": "note",
+      "x": 996,
+      "y": 240,
+      "props": {
+        "color": "blue",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-parking",
+      "type": "geo",
+      "x": 80,
+      "y": 800,
+      "props": {
+        "geo": "rectangle",
+        "w": 1280,
+        "h": 200,
+        "fill": "none",
+        "color": "grey",
+        "dash": "dashed",
+        "size": "s"
+      }
+    },
+    {
+      "id": "retro-parking-label",
+      "type": "text",
+      "x": 104,
+      "y": 820,
+      "text": "Parking lot",
+      "props": {
+        "size": "s",
+        "color": "grey",
+        "font": "sans"
+      }
+    }
+  ]
+}

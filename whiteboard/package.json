@@ -1,0 +1,31 @@
+{
+  "name": "whiteboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Personal whiteboard — a local thinking canvas built on the tldraw SDK",
+  "license": "ISC",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "tsc --noEmit && vite build",
+    "start": "node server/index.js",
+    "server": "node server/index.js"
+  },
+  "dependencies": {
+    "@tldraw/assets": "^5.2.5",
+    "better-sqlite3": "^13.0.2",
+    "express": "^5.2.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tldraw": "^5.2.5"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.1.5"
+  }
+}
